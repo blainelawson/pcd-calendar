@@ -1,0 +1,4 @@
+#!/usr/bin/env ruby
+
+require './lib/pcd_calendar'
+PCDCalendar::CLI.new.call

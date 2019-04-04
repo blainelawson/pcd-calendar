@@ -1,5 +1,3 @@
-module Pcd
-  module Calendar
+module PCDCalendar
     VERSION = "0.1.0"
-  end
 end

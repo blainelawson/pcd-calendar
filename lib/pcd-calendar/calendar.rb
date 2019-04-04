@@ -1,8 +1,5 @@
-require "pcd/calendar/version"
+require "./version"
 
-module Pcd
-  module Calendar
+module pcd-calendar
     class Error < StandardError; end
-    # Your code goes here...
-  end
 end
