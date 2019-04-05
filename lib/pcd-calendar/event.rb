@@ -1,0 +1,2 @@
+class PCDCalendar::Event
+end
