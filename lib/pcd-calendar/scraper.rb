@@ -35,7 +35,7 @@ class PCDCalendar::Scraper
 
 
     event_hash = {
-                  title:   doc.css(".tribe-events-single-event-title").text.strip,
+                  name:   doc.css(".tribe-events-single-event-title").text.strip,
                   date:    doc.css("abbr").attr("title").value,
                   venue:   doc.css(".tribe-venue").text.strip,
                   address: doc.css("span .tribe-street-address").text.strip,

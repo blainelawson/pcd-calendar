@@ -7,7 +7,16 @@ class PCDCalendar::CLI
     def call
       url = 'https://pinellasdemocrats.org/events/2019-05/'
       events_array = PCDCalendar::Scraper.scrape_calendar_page(url)
+      make_events(events_array)
+      binding.pry
       main_menu
+    end
+
+    def make_events(events_array)
+      events_array.each do |event|
+        # binding.pry
+        event = PCDCalendar::Event.new(event)
+      end
     end
 
     def print_months
