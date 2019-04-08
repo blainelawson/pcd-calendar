@@ -17,7 +17,7 @@ class PCDCalendar::Event
       self.send(("#{k}="), v)
       # binding.pry
     end
-    binding.pry
+    # binding.pry
   end
 
   def self.create_from_collection(events_array)

@@ -6,9 +6,8 @@ class PCDCalendar::CLI
 
     def call
       make_events
-      add_event_details
-      binding.pry
       make_groups_from_events
+      add_event_details
       main_menu
     end
 
@@ -28,9 +27,10 @@ class PCDCalendar::CLI
 
     def make_groups_from_events
       PCDCalendar::Event.all.each do |event|
-        binding.pry
-        event.group
-
+        # binding.pry
+        group_hash = PCDCalendar::Scraper.scrape_group_from_event_page(event.url)
+        event.group = PCDCalendar::Group.create_from_collection(group_hash)
+        # binding.pry
 
       end
     end
