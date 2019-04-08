@@ -24,24 +24,20 @@ class PCDCalendar::Scraper
     events_hash_array
   end
 
-  def self.scrape_event_page(url)
+  def self.scrape_events_from_event_page(url)
     html = open(url)
     doc = Nokogiri::HTML(html)
     event_hash = {}
-    group_hash = {}
-    group_email = nil
-    # binding.pry
-
-
 
     event_hash = {
-                  name:   doc.css(".tribe-events-single-event-title").text.strip,
+                  name:    doc.css(".tribe-events-single-event-title").text.strip,
                   date:    doc.css("abbr").attr("title").value,
                   venue:   doc.css(".tribe-venue").text.strip,
                   address: doc.css("span .tribe-street-address").text.strip,
                   city:    doc.css("span .tribe-locality").text.strip,
                   state:   doc.css("span .tribe-region").text.strip,
-                  zip:     doc.css("span .tribe-postal-code").text.strip
+                  zip:     doc.css("span .tribe-postal-code").text.strip,
+                  group:   doc.css("p strong").text.strip
                   }
 
       if self.is_recurring?(doc) # selectors differ when events are recurring vs. non-recurring
@@ -49,7 +45,19 @@ class PCDCalendar::Scraper
       else
         event_time[:time] = doc.css(".tribe-events-start-time").text
       end
-    #^^^^^^ end event_hash creation
+
+      if event_hash[:group] == ""
+        event_hash[:group] = event_hash[:name].gsub(" Meeting", "")
+      end
+
+      event_hash
+  end # end self.scrape_events_from_event_page
+
+  def self.scrape_group_from_event_page(url)
+    html = open(url)
+    doc = Nokogiri::HTML(html)
+    group_hash = {}
+    group_email = nil
 
     group_hash = {
                   name:  doc.css("p strong").text.strip,
@@ -64,9 +72,9 @@ class PCDCalendar::Scraper
           group_hash[:email] = line.split(":").last.strip
         end
       end
-    #^^^^^^^ end group hash creation
-    # binding.pry
-  end # end self.scrape_event_page
+
+    group_hash
+  end
 
   def self.is_recurring?(doc)
     doc.css("div .recurringinfo").text ? true : false

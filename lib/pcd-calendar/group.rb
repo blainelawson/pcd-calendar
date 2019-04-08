@@ -1,5 +1,5 @@
 class PCDCalendar::Group
-  attr_accessor :name, :phone, :url, :email
+  attr_accessor :name, :phone, :url, :email, :events
   @@all = []
 
   # def initialize(events)

@@ -5,17 +5,33 @@ class PCDCalendar::CLI
   MONTHS = [ "January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"]
 
     def call
-      url = 'https://pinellasdemocrats.org/events/2019-05/'
-      events_array = PCDCalendar::Scraper.scrape_calendar_page(url)
-      make_events(events_array)
+      make_events
+      add_event_details
       binding.pry
+      make_groups_from_events
       main_menu
     end
 
-    def make_events(events_array)
-      events_array.each do |event|
+    def make_events
+      url = 'https://pinellasdemocrats.org/events/2019-05/'
+      events_array = PCDCalendar::Scraper.scrape_calendar_page(url)
+      PCDCalendar::Event.create_from_collection(events_array)
+    end
+
+    def add_event_details
+      PCDCalendar::Event.all.each do |event|
         # binding.pry
-        event = PCDCalendar::Event.new(event)
+        details = PCDCalendar::Scraper.scrape_events_from_event_page(event.url)
+        event.add_event_details(details)
+      end
+    end
+
+    def make_groups_from_events
+      PCDCalendar::Event.all.each do |event|
+        binding.pry
+        event.group
+
+
       end
     end
 
