@@ -14,13 +14,14 @@ class PCDCalendar::Group
         # binding.pry
         PCDCalendar::Group.new(event)
       end
-      # binding.pry
-      PCDCalendar::Group.add_events_to_group(event)
   end
 
   def add_events_to_group
     PCDCalendar::Event.all.each do |e|
-      binding.pry
+      # binding.pry
+      if e.group == self.name
+        self.events << e
+      end
     end
   end
 

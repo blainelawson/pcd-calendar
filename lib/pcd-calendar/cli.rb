@@ -1,19 +1,20 @@
 # Our CLI Controller
 
 class PCDCalendar::CLI
-
+  BASE_PATH = 'https://pinellasdemocrats.org/events/2019-'
   MONTHS = [ "January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"]
 
     def call
-      make_events
-      make_groups_from_events
+      month = main_menu
+      make_events(month)
       add_event_details
-      main_menu
+      make_groups_from_events
+      display_events
+
     end
 
-    def make_events
-      url = 'https://pinellasdemocrats.org/events/2019-05/'
-      events_array = PCDCalendar::Scraper.scrape_calendar_page(url)
+    def make_events(month)
+      events_array = PCDCalendar::Scraper.scrape_calendar_page(BASE_PATH + month)
       PCDCalendar::Event.create_from_collection(events_array)
     end
 
@@ -44,7 +45,7 @@ class PCDCalendar::CLI
     def main_menu
       input = nil
 
-      while input != "exit"
+      # while input != "exit"
         puts "What month would you like to view events?"
         puts "(type \"exit\" to exit program)"
         puts "Enter number or month:"
@@ -54,16 +55,28 @@ class PCDCalendar::CLI
 
         if (1..12).include?(input.to_i) || MONTHS.include?(input)
           MONTHS.include?(input) ? month = MONTHS.index(input) : month = input
+          if month.size < 2
+            month = "0" + month
+          end
         end
-
+        # binding.pry
         system 'clear'
         puts "Displaying #{MONTHS[month.to_i - 1]}"
         puts "*-*-*-*-*-*-*-*-*-*-*"
-        puts "display_events(month)"
-      end
+
+      month
+
+      # end
     end # main_menu
 
-    def display_events(month)
-      scraper
+    def display_events
+      puts "Events by group:"
+      PCDCalendar::Event.all.each.with_index do |event, i|
+        binding.pry
+        puts event.group.name
+        puts event.name
+
+      end
+
     end
 end

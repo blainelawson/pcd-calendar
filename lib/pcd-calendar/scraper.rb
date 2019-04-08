@@ -8,6 +8,7 @@ class PCDCalendar::Scraper
   end
 
   def self.scrape_calendar_page(url) # returns array of events with their event url's {name: , url: }
+    # binding.pry
     html = open(url)
     doc = Nokogiri::HTML(html)
     events_hash_array = []
