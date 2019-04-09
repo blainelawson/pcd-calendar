@@ -8,7 +8,6 @@ class PCDCalendar::Scraper
   end
 
   def self.scrape_calendar_page(url) # returns array of events with their event url's {name: , url: }
-    # binding.pry
     html = open(url)
     doc = Nokogiri::HTML(html)
     events_hash_array = []
@@ -48,7 +47,6 @@ class PCDCalendar::Scraper
       end
 
       if event_hash[:group] == ""
-        # binding.pry
         event_hash[:group] = event_hash[:name].gsub(" Meeting!", "").gsub("Monthly", " ").gsub("Meeting", "").gsub("Combined","").strip
       end
 
@@ -95,7 +93,6 @@ class PCDCalendar::Scraper
           end
         end
       end
-  # binding.pry
     group_hash
   end
 

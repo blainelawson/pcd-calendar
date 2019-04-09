@@ -11,14 +11,12 @@ class PCDCalendar::Group
 
   def self.create_from_collection(event)
       if !@@all.include?(event[:name])
-        # binding.pry
         PCDCalendar::Group.new(event)
       end
   end
 
   def add_events_to_group
     PCDCalendar::Event.all.each do |e|
-      # binding.pry
       if e.group == self.name
         self.events << e
       end

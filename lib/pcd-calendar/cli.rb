@@ -10,16 +10,26 @@ class PCDCalendar::CLI
       add_event_details
       make_groups_from_events
       display_events
-      sub_menu_group_info
     end
 
     def sub_menu_group_info
+      input = nil
       PCDCalendar::Group.all.each.with_index(1) {|group, i| print "|  #{i}. #{group.name}  "}
       puts "|"
       puts
       print "Enter group number for more info on group. (Enter \"back\" to go back to events): "
       input = gets.strip
-      input == "back" ? display_events : display_group_info(input)
+      if input == "back"
+        system 'clear'
+        display_events
+      elsif input == "exit"
+        system 'clear'
+        quit
+      elsif !(1..PCDCalendar::Group.all.size).include?(input.to_i)
+        sub_menu_group_info
+      else
+        display_group_info(input)
+      end
     end
 
     def display_group_info(input)
@@ -47,7 +57,6 @@ class PCDCalendar::CLI
 
     def add_event_details
       PCDCalendar::Event.all.each do |event|
-        # binding.pry
         details = PCDCalendar::Scraper.scrape_events_from_event_page(event.url)
         event.add_event_details(details)
       end
@@ -55,10 +64,8 @@ class PCDCalendar::CLI
 
     def make_groups_from_events
       PCDCalendar::Event.all.each do |event|
-        # binding.pry
         group_hash = PCDCalendar::Scraper.scrape_group_from_event_page(event.url)
         event.group = PCDCalendar::Group.create_from_collection(group_hash)
-        # binding.pry
 
       end
     end
@@ -72,7 +79,6 @@ class PCDCalendar::CLI
     def main_menu
       input = nil
 
-      # while input != "exit"
         puts "What month would you like to view events?"
         puts "(type \"exit\" to exit program)"
         puts "Enter number or month:"
@@ -86,18 +92,15 @@ class PCDCalendar::CLI
             month = "0" + month
           end
         end
-        # binding.pry
         system 'clear'
         puts "Displaying #{MONTHS[month.to_i - 1]}"
         puts "*-*-*-*-*-*-*-*-*-*-*"
 
       month
 
-      # end
     end # main_menu
 
     def display_events
-      # binding.pry
       puts "Events by group:"
       PCDCalendar::Group.all.each.with_index(1) do |group, i|
         # binding.pry
@@ -113,5 +116,10 @@ class PCDCalendar::CLI
         end
         puts
       end
+      sub_menu_group_info
+    end
+
+    def quit
+      puts "Goodbye"
     end
 end

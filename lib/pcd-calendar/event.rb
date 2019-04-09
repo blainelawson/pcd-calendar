@@ -12,12 +12,9 @@ class PCDCalendar::Event
   end
 
   def add_event_details(details)
-    # binding.pry
     details.each do |k,v|
       self.send(("#{k}="), v)
-      # binding.pry
     end
-    # binding.pry
   end
 
   def self.create_from_collection(events_array)
