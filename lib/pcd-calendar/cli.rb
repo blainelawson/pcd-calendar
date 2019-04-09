@@ -104,7 +104,6 @@ class PCDCalendar::CLI
 
     def display_events
       system 'clear'
-      # binding.pry
       puts "Displaying #{MONTHS[@current_month.to_i - 1]}"
       puts "*-*-*-*-*-*-*-*-*-*-*"
 
