@@ -23,6 +23,10 @@ class PCDCalendar::Group
     end
   end
 
+  def self.reset!
+    @@all.clear
+  end
+
   def self.all
     @@all
   end

@@ -4,9 +4,12 @@ class PCDCalendar::CLI
   BASE_PATH = 'https://pinellasdemocrats.org/events/2019-'
   MONTHS = [ "January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"]
 
+  attr_accessor :current_month
+
     def call
-      month = main_menu
-      make_events(month)
+      system 'clear'
+      @current_month = main_menu
+      make_events
       add_event_details
       make_groups_from_events
       display_events
@@ -17,7 +20,8 @@ class PCDCalendar::CLI
       PCDCalendar::Group.all.each.with_index(1) {|group, i| print "|  #{i}. #{group.name}  "}
       puts "|"
       puts
-      print "Enter group number for more info on group. (Enter \"back\" to go back to events): "
+      puts "Enter group number for more info on group:"
+      print "(Enter \"back\" to go back to events, \"exit\" to exit program, or \"restart\" to select a different month): "
       input = gets.strip
       if input == "back"
         system 'clear'
@@ -25,6 +29,8 @@ class PCDCalendar::CLI
       elsif input == "exit"
         system 'clear'
         quit
+      elsif input == "restart"
+        restart
       elsif !(1..PCDCalendar::Group.all.size).include?(input.to_i)
         sub_menu_group_info
       else
@@ -50,8 +56,9 @@ class PCDCalendar::CLI
     end
 
 
-    def make_events(month)
-      events_array = PCDCalendar::Scraper.scrape_calendar_page(BASE_PATH + month)
+    def make_events
+      puts "....Loading events! This will take a moment...."
+      events_array = PCDCalendar::Scraper.scrape_calendar_page(BASE_PATH + @current_month)
       PCDCalendar::Event.create_from_collection(events_array)
     end
 
@@ -66,7 +73,6 @@ class PCDCalendar::CLI
       PCDCalendar::Event.all.each do |event|
         group_hash = PCDCalendar::Scraper.scrape_group_from_event_page(event.url)
         event.group = PCDCalendar::Group.create_from_collection(group_hash)
-
       end
     end
 
@@ -92,15 +98,16 @@ class PCDCalendar::CLI
             month = "0" + month
           end
         end
-        system 'clear'
-        puts "Displaying #{MONTHS[month.to_i - 1]}"
-        puts "*-*-*-*-*-*-*-*-*-*-*"
 
       month
-
     end # main_menu
 
     def display_events
+      system 'clear'
+      # binding.pry
+      puts "Displaying #{MONTHS[@current_month.to_i - 1]}"
+      puts "*-*-*-*-*-*-*-*-*-*-*"
+
       puts "Events by group:"
       PCDCalendar::Group.all.each.with_index(1) do |group, i|
         # binding.pry
@@ -117,6 +124,12 @@ class PCDCalendar::CLI
         puts
       end
       sub_menu_group_info
+    end
+
+    def restart
+      PCDCalendar::Group.reset!
+      PCDCalendar::Event.reset!
+      call
     end
 
     def quit

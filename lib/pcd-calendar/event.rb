@@ -22,4 +22,8 @@ class PCDCalendar::Event
       PCDCalendar::Event.new(event)
     end
   end
+
+  def self.reset!
+    @@all.clear
+  end
 end
