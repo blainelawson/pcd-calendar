@@ -2,9 +2,10 @@ This is a small change
 
 # Pcd::Calendar
 
-Welcome to your new gem! In this directory, you'll find the files you need to be able to package up your Ruby library into a gem. Put your Ruby code in the file `lib/pcd/calendar`. To experiment with that code, run `bin/console` for an interactive prompt.
+PCD Calendar will scrape event data from the calendar available on pinellasdemocrats.org, giving the user the ability to list events group. Events should be displayed with dates, times, and locations. This Gem should also provide a secondary use of presenting information pertinent to groups, such as address, Facebook page, website, and phone number.
 
-TODO: Delete this and the text above, and describe your gem
+Collecting said information will require four classes: Scraper, which will only be collecting the data from the website; Group, which will instantiate a new group with their details; Events, which will hold each event; and the CLI class, which will be used to interact with the user.
+
 
 ## Installation
 
