@@ -19,17 +19,24 @@ class PCDCalendar::CLI
       puts
       print "Enter group number for more info on group. (Enter \"back\" to go back to events): "
       input = gets.strip
-      display_group_info(input)
+      input == "back" ? display_events : display_group_info(input)
     end
 
-    def display_group_info(num)
+    def display_group_info(input)
       system 'clear'
-      index = num.to_i - 1
-      puts "Group name: #{PCDCalendar::Group.all[index].name}"
-      puts "Phone:      #{PCDCalendar::Group.all[index].phone}"
-      puts "E-mail:     #{PCDCalendar::Group.all[index].email}"
-      puts "URL:        #{PCDCalendar::Group.all[index].url}"
-      # binding.pry
+      if input == "back"
+        sub_menu_group_info
+      else
+        index = input.to_i - 1
+        puts "=================================================================="
+        puts "Group name: #{PCDCalendar::Group.all[index].name}"
+        puts "Phone:      #{PCDCalendar::Group.all[index].phone}"
+        puts "E-mail:     #{PCDCalendar::Group.all[index].email}"
+        puts "URL:        #{PCDCalendar::Group.all[index].url}"
+        puts "=================================================================="
+        puts
+      end
+      sub_menu_group_info
     end
 
 

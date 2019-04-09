@@ -70,13 +70,24 @@ class PCDCalendar::Scraper
         group_hash[:name] = doc.css(".tribe-events-single-event-title").text.gsub(" Meeting!", "").gsub("Monthly", " ").gsub("Meeting", "").gsub("Combined","").strip
       end
 
-      if !doc.css(".tribe-events-single-event-description").css("a").empty?
-        # binding.pry
-        group_hash[:url] = doc.css(".tribe-events-single-event-description").css("a").attr("href").value
+      if group_hash[:phone] == "" && !doc.css(".tribe-organizer-tel").empty?
+        group_hash[:phone] = doc.css(".tribe-organizer-tel").text.strip
+      else
+        doc.css(".tribe-events-single-event-description").text.split("\n").each do |line|
+          if line.include?("Phone")
+            group_hash[:phone] = line.split(":").last.strip
+          end
+        end
       end
 
-      if doc.css(".tribe-organizer-email").text == ""
-        group_hash[:email] = doc.css(".tribe-organizer-email")
+      if !doc.css(".tribe-events-event-url").empty?
+        group_hash[:url] = doc.css(".tribe-events-event-url").css("a").attr("href").value.strip
+      elsif !doc.css(".tribe-events-single-event-description").css("a").empty?
+        group_hash[:url] = doc.css(".tribe-events-single-event-description").css("a").attr("href").value.strip
+      end
+
+      if !doc.css(".tribe-organizer-email").empty?
+        group_hash[:email] = doc.css(".tribe-organizer-email").text.strip
       else
         doc.css(".tribe-events-single-event-description").text.split("\n").each do |line|
           if line.include?("Email")
@@ -84,12 +95,12 @@ class PCDCalendar::Scraper
           end
         end
       end
-
+  # binding.pry
     group_hash
   end
 
   def self.is_recurring?(doc)
-    doc.css("div .recurringinfo").text ? true : false
+    doc.css(".recurringinfo").text ? true : false
   end
 
 end
