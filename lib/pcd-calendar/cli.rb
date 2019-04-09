@@ -110,7 +110,6 @@ class PCDCalendar::CLI
 
       puts "Events by group:"
       PCDCalendar::Group.all.each.with_index(1) do |group, i|
-        # binding.pry
         puts "#{i}. #{group.name}"
         puts "==============================================="
         group.events.each do |event|
