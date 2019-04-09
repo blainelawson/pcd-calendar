@@ -70,13 +70,21 @@ class PCDCalendar::CLI
     end # main_menu
 
     def display_events
+      # binding.pry
       puts "Events by group:"
-      PCDCalendar::Event.all.each.with_index do |event, i|
-        binding.pry
-        puts event.group.name
-        puts event.name
-
+      PCDCalendar::Group.all.each.with_index(1) do |group, i|
+        # binding.pry
+        puts "#{i}. #{group.name}"
+        puts "==============================================="
+        group.events.each do |event|
+          puts event.name
+          puts "#{event.date}, #{event.time}"
+          puts event.venue
+          puts event.address
+          puts "#{event.city}, #{event.state} #{event.zip}"
+          puts "-----------------------------------------------"
+        end
+        puts
       end
-
     end
 end
