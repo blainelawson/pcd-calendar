@@ -10,8 +10,28 @@ class PCDCalendar::CLI
       add_event_details
       make_groups_from_events
       display_events
-
+      sub_menu_group_info
     end
+
+    def sub_menu_group_info
+      PCDCalendar::Group.all.each.with_index(1) {|group, i| print "|  #{i}. #{group.name}  "}
+      puts "|"
+      puts
+      print "Enter group number for more info on group. (Enter \"back\" to go back to events): "
+      input = gets.strip
+      display_group_info(input)
+    end
+
+    def display_group_info(num)
+      system 'clear'
+      index = num.to_i - 1
+      puts "Group name: #{PCDCalendar::Group.all[index].name}"
+      puts "Phone:      #{PCDCalendar::Group.all[index].phone}"
+      puts "E-mail:     #{PCDCalendar::Group.all[index].email}"
+      puts "URL:        #{PCDCalendar::Group.all[index].url}"
+      # binding.pry
+    end
+
 
     def make_events(month)
       events_array = PCDCalendar::Scraper.scrape_calendar_page(BASE_PATH + month)
