@@ -58,7 +58,7 @@ class PCDCalendar::CLI
 
     def make_events
       puts "....Loading events! This will take a moment...."
-      events_array = PCDCalendar::Scraper.scrape_calendar_page(BASE_PATH + @current_month)
+      events_array = PCDCalendar::Scraper.scrape_calendar_page(BASE_PATH + @current_month, current_month)
       PCDCalendar::Event.create_from_collection(events_array)
     end
 
@@ -99,7 +99,12 @@ class PCDCalendar::CLI
           end
         end
 
-      month
+        if !PCDCalendar::Event.find_by_month(month).empty?
+          @current_month = month
+          display_events
+        else
+          month
+        end
     end # main_menu
 
     def display_events
@@ -125,8 +130,6 @@ class PCDCalendar::CLI
     end
 
     def restart
-      PCDCalendar::Group.reset!
-      PCDCalendar::Event.reset!
       call
     end
 

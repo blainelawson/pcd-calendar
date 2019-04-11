@@ -7,7 +7,7 @@ class PCDCalendar::Scraper
   def run
   end
 
-  def self.scrape_calendar_page(url) # returns array of events with their event url's {name: , url: }
+  def self.scrape_calendar_page(url, current_month) # returns array of events with their event url's {name: , url: }
     html = open(url)
     doc = Nokogiri::HTML(html)
     events_hash_array = []
@@ -16,7 +16,8 @@ class PCDCalendar::Scraper
     doc.css(".tribe-events-month-event-title").each do |event|
       event_hash = {
                 name: event.text,
-                url:  event.css("a").attr("href").value
+                url:  event.css("a").attr("href").value,
+                month: current_month
               }
       events_hash_array << event_hash
     end
@@ -94,10 +95,6 @@ class PCDCalendar::Scraper
         end
       end
     group_hash
-  end
-
-  def self.is_recurring?(doc)
-    doc.css(".recurringinfo").text ? true : false
   end
 
 end
