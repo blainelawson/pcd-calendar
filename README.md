@@ -1,5 +1,3 @@
-This is a small change
-
 # Pcd::Calendar
 
 PCD Calendar will scrape event data from the calendar available on pinellasdemocrats.org, giving the user the ability to list events group. Events should be displayed with dates, times, and locations. This Gem should also provide a secondary use of presenting information pertinent to groups, such as address, Facebook page, website, and phone number.
