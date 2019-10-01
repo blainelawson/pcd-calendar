@@ -1,5 +1,7 @@
 # Pcd::Calendar
 
+WALKTHROUGH: https://drive.google.com/open?id=1fmT6D_rVHDkQ-up3uK31DW3leTvQ5swW
+
 PCD Calendar will scrape event data from the calendar available on pinellasdemocrats.org, giving the user the ability to list events group. Events should be displayed with dates, times, and locations. This Gem should also provide a secondary use of presenting information pertinent to groups, such as address, Facebook page, website, and phone number.
 
 Collecting said information will require four classes: Scraper, which will only be collecting the data from the website; Group, which will instantiate a new group with their details; Events, which will hold each event; and the CLI class, which will be used to interact with the user.
